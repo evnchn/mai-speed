@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mai-speed
 // @namespace    https://mai-speed.evnchn.io
-// @version      1.1
+// @version      1.2
 // @description  Apply image caching for faster loading
 // @match        https://maimaidx-eng.com/*
 // @match        http://maimaidx-eng.com/*
@@ -27,11 +27,9 @@
             img.setAttribute('data-original-src', imgUrl);
 
             // Generate the cachePhoto URL with the image path
-            //const cacheUrl = `http://127.0.0.1:8000/cachePhoto?path=${encodeURIComponent(imgUrl)}`;
-
-            ///const cacheUrl = imgUrl.replace("://", "://mai-speed.evnchn.io/");
-
             const cacheUrl = imgUrl.replaceAll("\:\/\/", "://mai-speed.evnchn.io/");
+            // in development:
+            // const cacheUrl = imgUrl.replaceAll("\:\/\/", "://127.0.0.1:10000/").replaceAll("https","http");
 
             // Set the cachePhoto URL as the new source for the image
             img.setAttribute('src', cacheUrl);
@@ -40,36 +38,47 @@
             img.setAttribute('data-caching-applied', 'true');
 
             // Add an error event listener to the image
-            img.addEventListener('error', function () {
+            img.onerror = function (errorMsg) {
                 // Rollback the path using the data attribute
-                const originalSrc = img.getAttribute('data-original-src');
-                img.setAttribute('src', originalSrc);
+                const originalSrc = this.getAttribute('data-original-src');
+                this.setAttribute('src', originalSrc);
+                console.error(originalSrc);
+                //console.error(errorMsg);
 
                 // Set the server status to false
                 localStorage.setItem("mai-speed-server-status", 'false');
-            });
+            }
+            img.onload = function () {
+                if (!this.src.startsWith("https://maimai")) {
+                    console.log(this.src);
+                }
+                img.onerror = function () { }
+            }
         } else {
             console.log("Server not yet ready...");
         }
     }
 
     // Function to check if caching has been applied to the image
-    function hasImageCachingApplied(img) {
-        return img.getAttribute('data-caching-applied') === 'true';
+    function hasImageCachingApplied(img_check) {
+        console.log(img_check.getAttribute('data-caching-applied'));
+        return img_check.getAttribute('data-caching-applied') === 'true';
     }
 
     // Function to apply caching to all images in the document
     function applyCachingToAllImages() {
         // Get all img tags in the document
         const imgTags = document.getElementsByTagName('img');
-
+        console.log(imgTags);
         // Iterate over each img tag
         for (let i = 0; i < imgTags.length; i++) {
             const img = imgTags[i];
-
+            //console.log(img);
             // Check if caching has already been applied to this image
             if (!hasImageCachingApplied(img)) {
                 applyImageCaching(img);
+            } else {
+                //console.log("Cached...");
             }
         }
     }
