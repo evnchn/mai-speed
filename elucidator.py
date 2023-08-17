@@ -59,7 +59,7 @@ def cache_photo(path):
     # response.cache_control.private = False
     response.cache_control.max_age = 10800
     response.cache_control.public = True
-
+    response.headers['Cache-Control'] = 'public, immutable, max-age=3600, stale-while-revalidate=600, stale-if-error=259200'
     print("->",response.headers['Cache-Control'])
     print("--->", response.cache_control)
 
