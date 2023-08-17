@@ -12,7 +12,7 @@ def i_am_ok():
 
 @app.route("/<path:path>")
 def cache_photo(path):
-    print(path)
+    path = f"https://{path}"
     # path = request.args.get("path")
     path = path.strip()
 
