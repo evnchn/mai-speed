@@ -36,8 +36,10 @@ def cache_photo(path):
     file_extension = file_extension.lower()  # Convert to lowercase for consistency
 
     # Create the cache directory if it doesn't exist
-    if not os.path.exists(cache_directory):
+    try:
         os.makedirs(cache_directory)
+    except:
+        pass
 
     # Construct the cached image path with the file extension
     cached_image_path = os.path.join(cache_directory, f"{path_hash}{file_extension}")
@@ -49,10 +51,17 @@ def cache_photo(path):
 
     # Set caching headers to maximize caching settings
     response = send_from_directory(cache_directory, f"{path_hash}{file_extension}")
-    response.headers['Cache-Control'] = 'public, max-age=10800'  # Cache for 3 hour, duration of server maintenance
-    expires_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=10800)
-    response.headers['Expires'] = expires_time.strftime('%a, %d %b %Y %H:%M:%S GMT')# Cache for 3 hour, duration of server maintenance
-    print(response.expires)
+    #response.headers['Cache-Control'] = 'public, max-age=10800'  # Cache for 3 hour, duration of server maintenance
+    #expires_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=10800)
+    #response.headers['Expires'] = expires_time.strftime('%a, %d %b %Y %H:%M:%S GMT')# Cache for 3 hour, duration of server maintenance
+    
+
+    response.cache_control.max_age = 10800
+    response.cache_control.public = True 
+
+    print("->",response.expires)
+    print("--->", response.cache_control)
+
     # Server maintenance 3-6am
     # Shops open at early as 8am
     # Cache updated at 7am, perfect
