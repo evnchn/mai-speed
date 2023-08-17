@@ -3,6 +3,7 @@ import hashlib
 from flask import Flask, request, send_from_directory, redirect
 import urllib.parse
 from common_functions import download_image, cache_directory, cached_paths_file, get_path_hash, deduplicate_cached_paths
+import datetime
 
 app = Flask(__name__)
 
@@ -49,7 +50,8 @@ def cache_photo(path):
     # Set caching headers to maximize caching settings
     response = send_from_directory(cache_directory, f"{path_hash}{file_extension}")
     response.headers['Cache-Control'] = 'public, max-age=10800'  # Cache for 3 hour, duration of server maintenance
-    response.headers['Expires'] = '10800'  # Cache for 3 hour, duration of server maintenance
+    expires_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=10800)
+    response.headers['Expires'] = expires_time.strftime('%a, %d %b %Y %H:%M:%S GMT')# Cache for 3 hour, duration of server maintenance
 
     # Server maintenance 3-6am
     # Shops open at early as 8am
