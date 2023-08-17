@@ -60,7 +60,7 @@ def cache_photo(path):
     response.cache_control.max_age = 10800
     response.cache_control.public = True
 
-    print("->",response.expires)
+    print("->",response.headers['Cache-Control'])
     print("--->", response.cache_control)
 
     # Server maintenance 3-6am
