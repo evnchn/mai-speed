@@ -10,9 +10,10 @@ app = Flask(__name__)
 def i_am_ok():
     return "I am OK"
 
-@app.route("/cachePhoto")
-def cache_photo():
-    path = request.args.get("path")
+@app.route("/<path:path>")
+def cache_photo(path):
+    print(path)
+    # path = request.args.get("path")
     path = path.strip()
 
     # Verify the domain of the URL
