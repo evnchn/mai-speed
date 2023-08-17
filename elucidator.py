@@ -52,7 +52,7 @@ def cache_photo(path):
     response.headers['Cache-Control'] = 'public, max-age=10800'  # Cache for 3 hour, duration of server maintenance
     expires_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=10800)
     response.headers['Expires'] = expires_time.strftime('%a, %d %b %Y %H:%M:%S GMT')# Cache for 3 hour, duration of server maintenance
-
+    print(response.expires)
     # Server maintenance 3-6am
     # Shops open at early as 8am
     # Cache updated at 7am, perfect
