@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mai-speed
 // @namespace    https://mai-speed.evnchn.io
-// @version      1.0
+// @version      1.1
 // @description  Apply image caching for faster loading
 // @match        https://maimaidx-eng.com/*
 // @match        http://maimaidx-eng.com/*
@@ -13,7 +13,7 @@
 
 (function () {
     'use strict';
-
+    console.log("mai-speed start!");
     localStorage.setItem("mai-speed-server-status", 'true'); // it doesn't do boolean...
     // we try and we know. we don't try and we never know.
 
@@ -27,7 +27,11 @@
             img.setAttribute('data-original-src', imgUrl);
 
             // Generate the cachePhoto URL with the image path
-            const cacheUrl = `https://mai-speed.evnchn.io/cachePhoto?path=${encodeURIComponent(imgUrl)}`;
+            //const cacheUrl = `http://127.0.0.1:8000/cachePhoto?path=${encodeURIComponent(imgUrl)}`;
+
+            ///const cacheUrl = imgUrl.replace("://", "://mai-speed.evnchn.io/");
+
+            const cacheUrl = imgUrl.replaceAll("\:\/\/", "://mai-speed.evnchn.io/");
 
             // Set the cachePhoto URL as the new source for the image
             img.setAttribute('src', cacheUrl);
@@ -69,6 +73,8 @@
             }
         }
     }
+
+    applyCachingToAllImages();
 
     // Observer to detect DOM changes
     const observer = new MutationObserver(function (mutationsList) {
