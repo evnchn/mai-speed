@@ -55,7 +55,7 @@ def cache_photo(path):
     #expires_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=10800)
     #response.headers['Expires'] = expires_time.strftime('%a, %d %b %Y %H:%M:%S GMT')# Cache for 3 hour, duration of server maintenance
     
-
+    response.cache_control.no_cache = None
     response.cache_control.max_age = 10800
     response.cache_control.public = True 
 
