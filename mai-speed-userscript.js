@@ -1,14 +1,21 @@
 // ==UserScript==
 // @name         mai-speed
 // @namespace    https://mai-speed.evnchn.io
-// @version      1.2
+// @version      1.3
 // @description  Apply image caching for faster loading
 // @match        https://maimaidx-eng.com/*
 // @match        http://maimaidx-eng.com/*
 // @run-at       document-body
+// @downloadURL  https://raw.githubusercontent.com/evnchn/mai-speed/main/mai-speed-userscript.js
+// @updateURL    https://raw.githubusercontent.com/evnchn/mai-speed/main/mai-speed-userscript.js
 // ==/UserScript==
 
+// V1.3: 
 
+// Error-free compatibility with what-is-mai-name QR codes
+// (Which are images without src)
+
+// Self-update via downloadURL and updateURL
 
 
 (function () {
@@ -25,6 +32,10 @@
 
             // Set the original path as a data attribute
             img.setAttribute('data-original-src', imgUrl);
+
+            if (imgUrl === null || !imgUrl.includes("//maimaidx-eng.com")) {
+                return;
+            }
 
             // Generate the cachePhoto URL with the image path
             const cacheUrl = imgUrl.replaceAll("\:\/\/", "://mai-speed.evnchn.io/");
