@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    ports:
+      - "10000:10000"
+    volumes:
+      - cache-data:/app/cache
+    restart: unless-stopped
+
+  updater:
+    build: .
+    command: ["python", "dark_repulser.py"]
+    volumes:
+      - cache-data:/app/cache
+    restart: unless-stopped
+
+volumes:
+  cache-data:
