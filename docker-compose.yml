@@ -5,6 +5,7 @@ services:
       - "10000:10000"
     volumes:
       - cache-data:/app/cache
+    mem_limit: 512m
     restart: unless-stopped
 
   updater:
@@ -12,6 +13,7 @@ services:
     command: ["python", "dark_repulser.py"]
     volumes:
       - cache-data:/app/cache
+    mem_limit: 512m
     restart: unless-stopped
 
 volumes:
