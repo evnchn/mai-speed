@@ -9,6 +9,9 @@ COPY elucidator.py dark_repulser.py common_functions.py ./
 
 RUN mkdir -p cache
 
+RUN useradd --create-home appuser && chown appuser:appuser cache
+USER appuser
+
 EXPOSE 10000
 
 CMD ["python", "elucidator.py"]
